@@ -1,0 +1,34 @@
+<article class="hentry">
+  <header>
+    <h1 class="entry-title">
+      <% if params[:controller] == "entries" && params[:action] == "show" -%>
+      <%= entry.title %>
+      <% else -%>
+      <%= link_to(entry.title, entry_path(entry)) %>
+      <% end -%>
+    </h1>
+  </header>
+  <div class="entry-content">
+    <%= entry.body %>
+  </div>
+  <section class="meta">
+    <% unless entry.keywords.empty? -%>
+    <ul class="keywords">
+      <% entry.keywords.each do |keyword| %>
+      <li class="tag"><%= link_to(keyword.name, keyword_path(keyword)) %></li>
+      <% end %>
+    </ul>
+    <% end -%>
+    <p class="signoff">
+      <span class="published updated">
+        <%= entry.created_at.strftime("%e %B, 0%Y") %>
+      </span> •
+      <% if !entry.bookmark_url.blank? -%>
+      <%= link_to(t("entries.bookmark_url"), entry.bookmark_url,
+          { :rel => "external" }) %>
+      <% end -%>
+      <%= link_to("⁋", entry_path(entry), { :class => "pilcrow",
+          :rel => "bookmark" }) %>
+    </p>
+  </section>
+</article>

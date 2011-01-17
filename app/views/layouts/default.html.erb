@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <%= render(:partial => "shared/header") %>
+  </head>
+  <body class="tk-museo-sans">
+    <nav id="nameplate">
+      <ul>
+        <li>
+          <%= link_to("Ratafia Currant", root_url, { :id => :logo,
+              :rel => "home index" }) %>
+        </li>
+        <li>
+          <%= link_to("Archives", "http://ratafia.info/archives",
+              { :id => :archives, :rel => "archives" }) %>
+        </li>
+        <li>
+          <%= link_to("Code", "http://github.com/stilist", { :id => :code,
+              :rel => "external" }) %>
+        </li>
+        <li>
+          <%= link_to("Links", "http://pinboard.in/u:stilist", { :id => :links,
+              :rel => "external" }) %>
+        </li>
+      </ul>
+    </nav>
+
+    <%= yield %>
+  </body>
+</html>

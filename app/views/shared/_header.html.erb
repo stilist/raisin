@@ -1,0 +1,10 @@
+<meta charset="UTF-8">
+<title>
+  <% @page_title ||= ":(" %>
+  <%= "#{@page_title} — Lifestream" %>
+</title>
+
+<%= yield(:meta_tags) %>
+
+<%= stylesheet_link_tag("http://static.ratafia.info/themes/ricardo/style.css",
+    "screen") %>

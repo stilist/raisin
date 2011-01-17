@@ -1,5 +1,7 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
-  hello: "Hello world"
+  entries:
+    bookmark_url: "Source"
+    newest: "Newest entries"
+
+  keywords:
+    entries_for_keyword: "Entries for keyword %{keyword}"

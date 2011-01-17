@@ -1,0 +1,5 @@
+# http://gowalla.com/api/keys
+gowalla:
+  api_key: whatamagicaltime
+  username: example
+  password: ex4mpl3

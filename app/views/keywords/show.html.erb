@@ -1,0 +1,7 @@
+<section>
+  <% unless @entries.empty? -%>
+  <%= render({ :partial => "entries/entry", :collection => @entries }) %>
+  <% else -%>
+  <p class="empty">No entries yet.</p>
+  <% end -%>
+</section>
