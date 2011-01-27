@@ -1,0 +1,26 @@
+= Raisin
+
+Raisin is intended as a simple way to maintain your own lifestream. Right now
+it’s something of a tech demo, but it does function.
+
+== Getting started
+
+Create your database: `rake db:setup`.
+
+== Importing data
+
+Raisin can import content from several services:
+
+1. **Gowalla:** your checkins
+1. **Twitter:** your tweets and favorites
+1. **YouTube:** your favorites
+
+To use the import functionality, copy `config/eternal_services.yml.example`
+to `config/eternal_services.yml` and edit it for your details.
+
+[Note: you’ll have to manually copy `config/eternal_services.yml` around if you
+deploy. It’s excluded from version control to prevent accidentally sharing your
+login information.]
+
+Once you’ve entered your details, run `rake import_external_services:all`. If
+everything goes well you should soon have a local copy of your content!

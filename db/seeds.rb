@@ -1,7 +1,8 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#   
-#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
-#   Major.create(:name => 'Daley', :city => cities.first)
+puts "Seeding..."
+
+puts "  * keywords"
+keywords = %w(kind:bookmark kind:checkin kind:favorite kind:image kind:like kind:listen kind:status kind:text src:flickr src:gowalla src:twitter src:youtube)
+keywords.each do |keyword_name|
+	keyword = { :name => keyword_name }
+	Keyword.find_or_create_by_name(keyword)
+end

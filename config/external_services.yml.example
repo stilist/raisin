@@ -1,5 +1,15 @@
+# Copy this file to config/eternal_services.yml and fill in your details.
+
 # http://gowalla.com/api/keys
 gowalla:
-  api_key: whatamagicaltime
-  username: example
-  password: ex4mpl3
+  api_key:
+  username:
+  password:
+
+# http://dev.twitter.com/apps/
+twitter:
+  consumer_key:
+  consumer_secret:
+
+youtube:
+  username:

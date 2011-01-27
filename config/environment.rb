@@ -10,6 +10,8 @@ Rails::Initializer.run do |config|
 	config.gem "crack"
 	config.gem "geokit"
 	config.gem "i18n"
+	config.gem "nokogiri"
+	config.gem "twitter_oauth"
 	config.gem "whenever"
 
 	config.time_zone = "Pacific Time (US & Canada)"

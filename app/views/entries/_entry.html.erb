@@ -1,21 +1,17 @@
-<article class="hentry">
+<article class="<%= entry_classes(entry) %>">
   <header>
-    <h1 class="entry-title">
-      <% if params[:controller] == "entries" && params[:action] == "show" -%>
-      <%= entry.title %>
-      <% else -%>
-      <%= link_to(entry.title, entry_path(entry)) %>
-      <% end -%>
-    </h1>
+    <h1 class="entry-title"><%= formatted_title(entry) %></h1>
   </header>
-  <div class="entry-content">
-    <%= entry.body %>
-  </div>
+  <section class="entry-content<%= " empty" if entry.body.blank? %>">
+    <%= auto_link(entry.body) %>
+  </section>
   <section class="meta">
     <% unless entry.keywords.empty? -%>
     <ul class="keywords">
       <% entry.keywords.each do |keyword| %>
-      <li class="tag"><%= link_to(keyword.name, keyword_path(keyword)) %></li>
+      <li class="tag <%= sanitized_keyword(keyword) %>">
+        <%= link_to(keyword.name, keyword_path(keyword)) %>
+      </li>
       <% end %>
     </ul>
     <% end -%>
@@ -31,4 +27,8 @@
           :rel => "bookmark" }) %>
     </p>
   </section>
+
+  <% if entry.has_locations? -%>
+    <%= generate_map(entry.locations, "entry_#{entry.id}") %>
+  <% end -%>
 </article>

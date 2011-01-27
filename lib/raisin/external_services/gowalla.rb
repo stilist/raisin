@@ -1,57 +1,70 @@
 module Raisin
 	module ExternalServices
 		class Gowalla
-			require "crack/json"
-			require "open-uri"
+			attr_accessor :config
 
-			attr_accessor :options
+			@@utilities = Raisin::ExternalServices::Utilities.new
 
+			# Currently imports checkins.
 			def import
-				user_info = get_user_info
-				checkins_url = user_info["activity_url"]
+				puts "  * getting user info"
+				user_info = api_call({ :method => "users/#{@config["username"]}" })
 
 				keywords = ["kind:checkin", "src:gowalla"].map do |keyword|
 					Keyword.find_or_create_by_name(keyword)
 				end
 
+				last_import = LastImport.first({
+						:conditions => { :service_name => "Gowalla" }})
+				last_updated = last_import ? last_import.timestamp : nil
+
 				entries = []
 				current_page = 1
 				get_next_page = true
-				per_page = 25
+				import_error = false
 
 				puts "  * getting checkins"
+				# xxx need to handle error situations -- HTTP errors, empty responses,
+				# authentication failure, etc.
 				until !get_next_page
-					# API has a hard limit of 25 checkins per page
-					checkins_url << "?per_page=#{per_page}&page=#{current_page}"
-					checkins = get_checkins({ :url => checkins_url })
+					# Gowalla API has a hard limit of 25 items per page
+					data = api_call({
+							:method => user_info["activity_url"],
+							:params => { :per_page => 25, :page => current_page }
+					})
 
-					if checkins["activity"] && !["activity"].empty?
-						checkins["activity"].each do |checkin|
+					if data && data["activity"] && !data["activity"].empty?
+						items = data["activity"]
+
+						items.each do |item|
 							entry = Entry.first({ :conditions => {
-									:bookmark_url => "http://gowalla.com#{checkin["url"]}" }})
+									:bookmark_url => "http://gowalla.com#{item["url"]}" }})
 
-							# xxx utilize @options["last_updated"]
-
-							# Only process/log previously-unseen checkins
+							# Only process/log previously-unseen itemss
 							unless entry
 								print "."
-								entry = generate_entry(checkin)
+								entry = generate_entry(item)
 								entry.keywords = keywords
 								entries << entry
+							end
+
+							# Stop pulling items when we hit an entry that's before our
+							# most recent import.
+							#
+							# xxx possible problem if there's a item while the import is
+							# running (/jordan)
+							if last_updated && entry.created_at < last_updated
+								get_next_page = false
+								break
 							end
 						end
 						current_page += 1
 
-						# If the current page has fewer items than `per_page` we can assume
-						# it's the last one with data.
-						if checkins["activity"].length < per_page
-							get_next_page = false
-						else
-							# Limited to 5 requests/second with API key or 1/second without.
-							# Automatically limit ourselves to 1/second.
-							sleep 1
-						end
+						# Limited to 5 requests/second with API key or 1/second without.
+						# Automatically limit ourselves to 1/second.
+						sleep 1
 					else
+						import_error = true
 						get_next_page = false
 					end
 				end
@@ -61,40 +74,57 @@ module Raisin
 				# We call the API newest-to-oldest, but it makes more sense for us to
 				# write to the database oldest-to-newest.
 				entries.reverse_each { |entry| entry.save }
-			end
 
-			private
-
-			def api_call(options)
-				begin
-					data = open("http://api.gowalla.com/#{options[:url]}", {
-							"X-Gowalla-API-Key" => @options["api_key"],
-							"Accept" => "application/json",
-							"Content-Type" => "application/json",
-							"User-Agent" => "Raisin Lifestream",
-							:http_basic_authentication => [@options["username"],
-									@options["password"]]
-					}).read
-					return Crack::JSON.parse(data)
-				rescue OpenURI::HTTPError => the_error
-					puts "\n\nERROR #{the_error.message}\n\n"
+				unless import_error
+					if last_import
+						last_import.update_attributes({ :timestamp => Time.now })
+					else
+						LastImport.create({ :service_name => "Gowalla",
+								:timestamp => Time.now })
+					end
 				end
 			end
 
-			def generate_entry(checkin)
-				spot = checkin["spot"]
+			private
+			# Call the Gowalla API.
+			#
+			# Options:
+			#     `:method` -- required, string
+			#         (e.g. `"/users/me"`)
+			#    `:params` -- optional, hash
+			#         (e.g. `{ "max-results" => 25 }`)
+			def api_call(options = {})
+				headers = {
+					"X-Gowalla-API-Key" => @config["api_key"],
+					"Accept" => "application/json",
+					"Content-Type" => "application/json",
+					:http_basic_authentication => [@config["username"],
+							@config["password"]]
+				}
 
-				entry = Entry.new
-				entry.title = "Checked in at #{spot["name"]}"
-				entry.created_at = checkin["created_at"]
-				entry.bookmark_url = "http://gowalla.com#{checkin["url"]}"
-				entry.body = checkin["message"] unless checkin["message"].blank?
+				@@utilities.api_call({
+						:path => "http://api.gowalla.com/#{options[:method]}",
+						:params => options[:params],
+						:headers => headers
+				})
+			end
+
+			def generate_entry(item)
+				entry = @@utilities.generate_entry({
+						:title => item["spot"]["name"],
+						:body => item["message"],
+						:created_at => item["created_at"],
+						:updated_at => item["created_at"],
+						:bookmark_url => "http://gowalla.com#{item["url"]}"
+				})
 
 				location = Location.find_or_initialize_by_lat_and_lng({
-						:lat => spot["lat"], :lng => spot["lng"],
-						:name => spot["name"] })
+						:lat => item["spot"]["lat"],
+						:lng => item["spot"]["lng"],
+						:name => item["spot"]["name"]
+				})
 				if location.new_record?
-					location_data = get_location({ :url => spot["url"] })
+					location_data = api_call({ :method => item["spot"]["url"] })
 					if location_data["street_address"]
 						location.address = "#{location_data["street_address"]}, #{location_data["locality"]}, #{location_data["region"]}"
 					end
@@ -102,18 +132,6 @@ module Raisin
 				entry.locations = [location]
 
 				entry
-			end
-
-			def get_checkins(options)
-				api_call(options)
-			end
-
-			def get_location(options)
-				api_call(options)
-			end
-
-			def get_user_info
-				api_call({ :url => "users/#{options["username"]}" })
 			end
 		end
 	end

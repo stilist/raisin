@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  service: MyString
+  timestamp: 2011-01-16 14:44:40
+
+two:
+  service: MyString
+  timestamp: 2011-01-16 14:44:40
