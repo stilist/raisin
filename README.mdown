@@ -5,7 +5,8 @@ it’s something of a tech demo, but it does function.
 
 == Getting started
 
-Create your database: `rake db:setup`.
+1. Copy `config/database.yml.example` to `config/database.yml`
+1. `rake db:setup`
 
 == Importing data
 
@@ -23,4 +24,4 @@ deploy. It’s excluded from version control to prevent accidentally sharing you
 login information.]
 
 Once you’ve entered your details, run `rake import_external_services:all`. If
-everything goes well you should soon have a local copy of your content!
+everything goes well you should be able to browse your content locally!
