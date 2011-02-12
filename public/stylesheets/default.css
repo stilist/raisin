@@ -108,7 +108,8 @@ strong { font-weight: normal; }
 
 /* ENTRIES */
 .hentry {margin:1em auto; padding-left:26px; position:relative; width:510px;}
-.hentry .entry-title, .hentry .entry-content {display:inline-block; word-wrap:break-word;}
+.hentry .entry-title, .hentry .entry-content {word-wrap:break-word;}
+.hentry .entry-title q {word-wrap:break-word;}
 .hentry .entry-title {font-size:0.9em; font-weight:normal; line-height:1.6em;}
 .hentry .entry-title a {border:none;}
 .hentry .entry-title code, .hentry .entry-content code {font-size:inherit;}

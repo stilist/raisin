@@ -23,40 +23,20 @@ jQuery(document).ready(function ($) {
 	});
 });
 
-function generate_sparklines(options) {
-	var settings = jQuery.extend({
-				activity: [],
-				longest_streak: 0
-			}, options),
-
-			activity_count = settings.activity.length,
-			$activity_types = jQuery("#activity_types"),
-
-			source = {},
+function generate_sparklines(data) {
+	var $activity_types = jQuery("#activity_types"),
+			$activity,
+			activity_count = data.length,
 			activity_data = [],
-			activity_name = "",
-			streak_shortfall = 0,
-			$activity;
+			pretty_name = "";
 
 	for (var i = 0; i < activity_count; ++i) {
-		activity = settings.activity[i];
+		activity = data[i];
+		activity_data = activity.counts;
+		pretty_name = activity.name.split(":")[1];
 
-		activity_name = activity.name.split(":")[1];
-
-		// make sure all sources are working with the same amount of data
-		streak_shortfall = settings.longest_streak - activity.counts.length;
-		if (0 < streak_shortfall) {
-			activity_data = [];
-			for (var j = 0; j < streak_shortfall; ++j) {
-				activity_data.push(0);
-			}
-			jQuery.merge(activity_data, activity.counts);
-		} else {
-			activity_data = activity.counts;
-		}
-
-		$activity = jQuery("<li class='" + activity_name + "'>" +
-			"  <a href='/keywords/" + activity.id + "'>" + activity_name + "</a>" +
+		$activity = jQuery("<li class='" + pretty_name + "'>" +
+			"  <a href='/keywords/" + activity.id + "'>" + activity.name + "</a>" +
 			"  <span class='sparkline'></span>" +
 			"</li>");
 		$activity_types.append($activity);
