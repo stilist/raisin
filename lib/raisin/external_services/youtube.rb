@@ -1,16 +1,24 @@
-# http://gdata.youtube.com/feeds/base/users/stilist/favorites?client=ytapi-youtube-user&v=2&max-results=50&start-index=450
+# http://gdata.youtube.com/feeds/base/users/[user]/favorites?client=ytapi-youtube-user&v=2&max-results=50&start-index=450
 
 module Raisin
 	module ExternalServices
 		class Youtube
-			attr_accessor :config
+			def initialize
+				@@utilities = Raisin::ExternalServices::Utilities.new
 
-			@@utilities = Raisin::ExternalServices::Utilities.new
+				begin
+					config_path = File.join Rails.root, "config", "external_services.yml"
+					config = YAML.load_file config_path
+					@@config = SERVICES_CONFIG["youtube"]
+				rescue Exception => e
+					abort "\n\nERROR: #{e}\n\n"
+				end
+			end
 
 			# Currently imports favorites. TODO: uploads, comments.
 			def import
-				keywords = ["kind:favorite", "src:youtube"].map do |keyword|
-					Keyword.find_or_create_by_name(keyword)
+				keywords = %w(kind:favorite src:youtube).map do |keyword|
+					Keyword.find_or_create_by_name keyword
 				end
 
 				last_updated = @@utilities.last_updated({ :service_name => "YouTube" })
@@ -35,13 +43,12 @@ module Raisin
 						favorites["feed"]["entry"].each do |item|
 							bookmark_url = item["link"].first["href"].sub("&feature=youtube_gdata", "")
 
-							entry = Entry.first({ :conditions => {
-									:bookmark_url => bookmark_url }})
+							entry = Entry.where(:bookmark_url => bookmark_url).first
 
 							# Only process/log previously-unseen items
 							unless entry
 								print "."
-								entry = generate_entry(item)
+								entry = generate_entry item
 								entry.keywords = keywords
 								entries << entry
 							end
@@ -69,7 +76,7 @@ module Raisin
 
 				unless import_error
 					if last_import
-						last_import.update_attributes({ :timestamp => Time.now })
+						last_import.update_attributes :timestamp => Time.now
 					else
 						LastImport.create({ :service_name => "YouTube",
 								:timestamp => Time.now })
@@ -78,30 +85,29 @@ module Raisin
 			end
 
 			private
+
 			# Call the YouTube API.
 			#
 			# Options:
-			#    `:method` -- required; API method
-			#       (e.g. `"favorites"`)
-			#    `:params` -- optional; hash of arguments for query string
-			#       (e.g. `{ "max-results" => 25 }`)
-			def api_call(options = {})
+			# `:method` -- required; API method (e.g. `"favorites"`)
+			# `:params` -- optional; hash of arguments for query string (e.g.
+			#   `{ "max-results" => 25 }`)
+			def api_call options = {}
 				params = { :client => "ytapi-youtube-user", :alt => "json" }
 				params.merge!(options[:params]) if options[:params]
 
 				@@utilities.api_call({
-						:path => "http://gdata.youtube.com/feeds/base/users/#{@config["username"]}/#{options[:method]}",
-						:params => params
+					:path => "http://gdata.youtube.com/feeds/base/users/#{@@config["username"]}/#{options[:method]}",
+					:params => params
 				})
 			end
 
-			def generate_entry(item)
+			def generate_entry item
 				@@utilities.generate_entry({
-						:title => item["title"]["$t"],
-						:created_at => item["updated"]["$t"],
-						:updated_at => item["updated"]["$t"],
-						:bookmark_url => item["link"].first["href"].
-								sub("&feature=youtube_gdata", "")
+					:title => item["title"]["$t"],
+					:created_at => item["updated"]["$t"],
+					:updated_at => item["updated"]["$t"],
+					:bookmark_url => item["link"].first["href"].sub("&feature=youtube_gdata", "")
 				})
 			end
 		end

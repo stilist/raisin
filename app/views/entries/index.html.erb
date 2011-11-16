@@ -1,7 +1,16 @@
 <section class="hfeed">
-  <% unless @entries.empty? -%>
-  <%= render({ :partial => "entries/entry", :collection => @entries }) %>
-  <% else -%>
+  <% unless @entries.empty? %>
+
+  <%= render :partial => "entries/entry", :collection => @entries %>
+
+  <script>
+  generate_map({
+    markers: <%= raw generate_markers(@entries).to_json %>,
+    map_id: "map"
+  });
+  </script>
+  <% else %>
+  <!-- TODO I18n -->
   <p class="empty">No entries yet.</p>
-  <% end -%>
+  <% end %>
 </section>

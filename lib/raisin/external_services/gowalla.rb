@@ -1,21 +1,29 @@
 module Raisin
 	module ExternalServices
 		class Gowalla
-			attr_accessor :config
+			def initialize
+				@@utilities = Raisin::ExternalServices::Utilities.new
 
-			@@utilities = Raisin::ExternalServices::Utilities.new
+				begin
+					config_path = File.join Rails.root, "config", "external_services.yml"
+					config = YAML.load_file config_path
+					@@config = SERVICES_CONFIG["gowalla"]
+				rescue Exception => e
+					abort "\n\nERROR: #{e}\n\n"
+				end
+			end
 
 			# Currently imports checkins.
 			def import
 				puts "  * getting user info"
-				user_info = api_call({ :method => "users/#{@config["username"]}" })
 
-				keywords = ["kind:checkin", "src:gowalla"].map do |keyword|
-					Keyword.find_or_create_by_name(keyword)
+				user_info = api_call :method => "users/#{@@config["username"]}"
+
+				keywords = %w(kind:checkin src:gowalla).map do |keyword|
+					Keyword.find_or_create_by_name keyword
 				end
 
-				last_import = LastImport.first({
-						:conditions => { :service_name => "Gowalla" }})
+				last_import = LastImport.where(:service_name => "Gowalla").first
 				last_updated = last_import ? last_import.timestamp : nil
 
 				entries = []
@@ -28,22 +36,21 @@ module Raisin
 				# authentication failure, etc.
 				until !get_next_page
 					# Gowalla API has a hard limit of 25 items per page
-					data = api_call({
-							:method => user_info["activity_url"],
+					data = api_call :method => user_info["activity_url"],
 							:params => { :per_page => 25, :page => current_page }
-					})
 
 					if data && data["activity"] && !data["activity"].empty?
 						items = data["activity"]
 
 						items.each do |item|
-							entry = Entry.first({ :conditions => {
-									:bookmark_url => "http://gowalla.com#{item["url"]}" }})
+							entry = Entry.
+									where(:bookmark_url => "http://gowalla.com#{item["url"]}").
+									first
 
 							# Only process/log previously-unseen itemss
 							unless entry
 								print "."
-								entry = generate_entry(item)
+								entry = generate_entry item
 								entry.keywords = keywords
 								entries << entry
 							end
@@ -77,15 +84,16 @@ module Raisin
 
 				unless import_error
 					if last_import
-						last_import.update_attributes({ :timestamp => Time.now })
+						last_import.update_attributes :timestamp => Time.now
 					else
-						LastImport.create({ :service_name => "Gowalla",
-								:timestamp => Time.now })
+						LastImport.create :service_name => "Gowalla",
+								:timestamp => Time.now
 					end
 				end
 			end
 
 			private
+
 			# Call the Gowalla API.
 			#
 			# Options:
@@ -93,43 +101,46 @@ module Raisin
 			#         (e.g. `"/users/me"`)
 			#    `:params` -- optional, hash
 			#         (e.g. `{ "max-results" => 25 }`)
-			def api_call(options = {})
+			def api_call options = {}
 				headers = {
-					"X-Gowalla-API-Key" => @config["api_key"],
+					"X-Gowalla-API-Key" => @@config["api_key"],
 					"Accept" => "application/json",
 					"Content-Type" => "application/json",
-					:http_basic_authentication => [@config["username"],
-							@config["password"]]
+					:http_basic_authentication => [@@config["username"],
+							@@config["password"]]
 				}
 
 				@@utilities.api_call({
-						:path => "http://api.gowalla.com/#{options[:method]}",
-						:params => options[:params],
-						:headers => headers
+					:path => "http://api.gowalla.com/#{options[:method]}",
+					:params => options[:params],
+					:headers => headers
 				})
 			end
 
-			def generate_entry(item)
+			def generate_entry item
 				entry = @@utilities.generate_entry({
-						:title => item["spot"]["name"],
-						:body => item["message"],
-						:created_at => item["created_at"],
-						:updated_at => item["created_at"],
-						:bookmark_url => "http://gowalla.com#{item["url"]}"
+					:title => item["spot"]["name"],
+					:body => item["message"],
+					:created_at => item["created_at"],
+					:updated_at => item["created_at"],
+					:bookmark_url => "http://gowalla.com#{item["url"]}"
 				})
 
 				location = Location.find_or_initialize_by_lat_and_lng({
-						:lat => item["spot"]["lat"],
-						:lng => item["spot"]["lng"],
-						:name => item["spot"]["name"]
+					:lat => item["spot"]["lat"],
+					:lng => item["spot"]["lng"],
+					:name => item["spot"]["name"]
 				})
+
 				if location.new_record?
-					location_data = api_call({ :method => item["spot"]["url"] })
+					location_data = api_call :method => item["spot"]["url"]
+
 					if location_data["street_address"]
 						location.address = "#{location_data["street_address"]}, #{location_data["locality"]}, #{location_data["region"]}"
 					end
 				end
-				entry.locations = [location]
+
+				entry.locations = [location].flatten
 
 				entry
 			end

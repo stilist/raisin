@@ -1,0 +1,36 @@
+//= require "style"
+
+body {background-image:none;}
+
+#participants {background-color:#aa5a32; left:0; position:fixed; right:0; top:0;}
+#map {height:400px; width:100%;}
+
+.hfeed {
+  .hentry {position:relative;
+    .entry-title {font-size:0.9em; font-weight:normal; line-height:1.6em;}
+
+    &.kind_text .entry-content {font-size:1.1em; margin:2.55em 0 1px 0;}
+
+    .keyword_icons {left:0; position:absolute; top:0; width:16px; -webkit-background-size:16px 16px;
+      .keyword {background-position:0 0; background-repeat:no-repeat; display:block; height:16px; margin-top:2px; width:16px;
+        &.kind_bookmark {background-image:url(<%= asset_path "famfamfam_silk/link.png" %>);}
+        &.kind_checkin {background-image:url(<%= asset_path "famfamfam_silk/map.png" %>);}
+        &.kind_favorite {background-image:url(<%= asset_path "famfamfam_silk/star.png" %>);}
+        &.kind_image {background-image:url(<%= asset_path "famfamfam_silk/image.png" %>);}
+        &.kind_like {background-image:url(<%= asset_path "famfamfam_silk/like.png" %>);}
+        &.kind_listen {background-image:url(<%= asset_path "famfamfam_silk/music.png" %>);}
+        &.kind_status {background-image:url(<%= asset_path "famfamfam_silk/pencil.png" %>);}
+        &.kind_text {background-image:url(<%= asset_path "famfamfam_silk/page_white_text.png" %>);}
+        &.src_flickr {background-image:url(<%= asset_path "external_services/flickr.png" %>);}
+        &.src_gowalla {background-image:url(<%= asset_path "external_services/gowalla.png" %>);}
+        &.src_twitter {background-image:url(<%= asset_path "external_services/twitter.png" %>);}
+        &.src_youtube {background-image:url(<%= asset_path "external_services/youtube.png" %>);}
+      }
+      .keyword + .keyword {margin-top:7px;}
+    }
+  }
+}
+
+/* per-keyword overrides */
+.hentry + .hentry {margin-top:30px;}
+.hentry + .hentry.kind_text .entry-title {font-size:18pt; margin:70px 0 11px 0;}

@@ -1,6 +1,5 @@
-ActionController::Routing::Routes.draw do |map|
-	map.root :controller => :entries, :action => :index
-
-	map.resources :entries
-	map.resources :keywords
+Raisin3::Application.routes.draw do
+	match "/" => "entries#index"
+	resources :entries
+	resources :keywords
 end

@@ -101,7 +101,6 @@ puts doc.xpath("//dt").count
 						:path => "http://pinboard.in/#{options[:method]}",
 						:params => options[:params],
 						:headers => headers,
-						:format => :none
 				})
 			end
 
