@@ -4,22 +4,7 @@
 
 $ = jQuery
 
-$keyword_icon_box_proto = $("<div class='keyword_icons'></div>")
-
-$(document).ready ->
-	$(".hentry").each ->
-		$keywords = $(this).find(".keywords li")
-
-		if $keywords.length > 0
-			$keyword_icon_box = $keyword_icon_box_proto.clone()
-
-			$(this).append $keyword_icon_box
-
-			$keywords.each ->
-				keyword_name = $(this).attr("class").split("tag ")[1]
-				$keyword_icon_box.append "<span class='keyword #{keyword_name}'></span>"
-
-window.generate_sparklines = (data) ->
+window.generate_sparklines = (activities) ->
 	$activity_types = $("#activity_types")
 
 	for activity in activities
@@ -47,7 +32,7 @@ window.generate_map = (options) ->
 		map_id: ""
 	, options
 
-	if google? && false is true
+	if google?
 		myOptions =
 			disableDefaultUI: true
 			center: new google.maps.LatLng 0, 0
@@ -68,3 +53,5 @@ window.generate_map = (options) ->
 				map: map
 
 		map.fitBounds bounds
+
+		$(window).bind "resize.map", -> map.fitBounds bounds

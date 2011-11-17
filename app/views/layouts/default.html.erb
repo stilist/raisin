@@ -4,16 +4,12 @@
     <%= render :partial => "shared/header" %>
   </head>
   <body>
-    <section id="participants">
-      <span class="you">You</span>
-    </section>
-
     <div id="map"></div>
 
     <% if @activity -%>
       <script>
       jQuery(document).ready(function ($) {
-        generate_sparklines(<%= @activity.to_json %>);
+        generate_sparklines(<%= raw @activity.to_json %>);
       });
       </script>
 
