@@ -7,6 +7,8 @@ gem 'sqlite3'
 gem "crack"
 gem 'geokit-rails3', :path => 'vendor/plugins/geokit-rails3'
 
+gem "kaminari"
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

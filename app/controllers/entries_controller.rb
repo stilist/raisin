@@ -3,18 +3,12 @@ class EntriesController < ApplicationController
 
 	def index
 		@page_title = t("entries.newest")
-		@entries = Entry.all({ :order => "created_at DESC", :limit => 50,
-				:include => [:keywords, :locations] })
-#		@activity = monthly_keyword_activity(@entries)
-
-		respond_to do |format|
-			format.html
-			format.json
-		end
+		@entries = Entry.page params[:page]
+		# @activity = monthly_keyword_activity @entries
 	end
 
 	def show
-		@entry = Entry.find_by_id(params[:id], :include => [:locations])
+		@entry = Entry.where(:id => params[:id]).joins([:locations]).first
 		if @entry
 			@page_title = @entry.title
 		else

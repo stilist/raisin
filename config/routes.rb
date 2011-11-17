@@ -1,5 +1,7 @@
 Raisin3::Application.routes.draw do
-	match "/" => "entries#index"
-	resources :entries
-	resources :keywords
+	resources :entries, :keywords do
+		get "page/:page", :action => :index, :on => :collection
+	end
+
+	root :to => "entries#index"
 end

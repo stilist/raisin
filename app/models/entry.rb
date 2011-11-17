@@ -4,6 +4,8 @@ class Entry < ActiveRecord::Base
 
 	validates_presence_of :title
 
+	default_scope order("entries.created_at DESC").joins([:keywords, :locations])
+
 	def has_locations?
 		!self.locations.empty?
 	end

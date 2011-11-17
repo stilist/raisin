@@ -3,6 +3,8 @@
 
   <%= render :partial => "entries/entry", :collection => @entries %>
 
+  <%= paginate @entries %>
+
   <script>
   generate_map({
     markers: <%= raw generate_markers(@entries).to_json %>,
