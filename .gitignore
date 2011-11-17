@@ -6,3 +6,6 @@ db/schema.rb
 db/development.sqlite3
 db/production.sqlite3
 config/external_services.yml
+
+# temp files
+tmp/
