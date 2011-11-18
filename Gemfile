@@ -32,6 +32,8 @@ gem "kaminari"
 #   gem 'webrat'
 # end
 
+gem "jquery-rails"
+
 group :assets do
   gem 'json'
   gem 'less', '~> 2.0.7'
