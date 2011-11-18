@@ -1,0 +1,25 @@
+%article{:class => entry_classes(entry), :id => "entry_#{entry.id}"}
+  %header
+    %h1.entry-title= formatted_title(entry)
+  %section{:class => "entry-content #{"empty" if entry.body.blank?}"}
+    = entry.body
+  %section.meta
+    - unless entry.keywords.empty?
+      %ul.keywords
+        - entry.keywords.each do |keyword|
+          %li
+            = link_to keyword.name, keyword_path(keyword), :rel => "tag",
+                :class => "tag #{sanitized_keyword keyword}"
+      .clear
+    %p.signoff
+      %a
+        %time.updated{:datetime => entry.created_at.iso8601,
+            :pubdate => "pubdate"}
+          = entry.created_at.strftime "%e %B, 0%Y"
+      •
+      - if !entry.bookmark_url.blank?
+        = link_to t("entries.bookmark_url"), entry.bookmark_url,
+            { :rel => "external" }
+        •
+      = link_to "⁋", entry_path(entry), :class => "pilcrow",
+          :rel => "bookmark", :title => "Permanent link for this entry"

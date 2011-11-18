@@ -1,0 +1,9 @@
+%meta{:charset => "UTF-8"}
+%title= @page_title || "Raisin"
+
+= stylesheet_link_tag :application
+= javascript_include_tag :application
+= javascript_include_tag params[:controller]
+= csrf_meta_tag
+
+= yield :meta_tags

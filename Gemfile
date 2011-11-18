@@ -5,9 +5,12 @@ gem 'rails', '3.1.1'
 gem 'sqlite3'
 
 gem "crack"
+
 gem 'geokit-rails3', :path => 'vendor/plugins/geokit-rails3'
 
 gem "kaminari"
+
+gem 'haml'
 
 # Use unicorn as the web server
 # gem 'unicorn'
