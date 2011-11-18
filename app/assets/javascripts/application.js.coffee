@@ -1,6 +1,9 @@
-#= require "handlebars.1.0.0.beta.3"
-#= require "jquery.offline"
-#= require "jquery.sparkline.min"
+#= require jquery
+#= require jquery_ujs
+#= require handlebars.1.0.0.beta.3
+#= require jquery.offline
+#= require jquery.sparkline.min
+#= require es5-shim.min
 
 $ = jQuery
 
@@ -32,6 +35,8 @@ window.generate_map = (options) ->
 		map_id: ""
 	, options
 
+	$map = $("#map")
+
 	if google?
 		myOptions =
 			disableDefaultUI: true
@@ -55,3 +60,5 @@ window.generate_map = (options) ->
 		map.fitBounds bounds
 
 		$(window).bind "resize.map", -> map.fitBounds bounds
+	else
+		$map.delay(500).slideUp 500

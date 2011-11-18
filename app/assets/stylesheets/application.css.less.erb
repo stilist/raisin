@@ -1,9 +1,12 @@
 //= require "style"
 
-body {background-image:none;}
+body {background-image:none; padding-top:0;}
 
 #participants {background-color:#aa5a32; left:0; position:fixed; right:0; top:0;}
-#map {height:400px; width:100%;}
+// Globe image is CC:BY; http://thenounproject.com/noun/globe/#icon-No711
+#map {background:rgba(0, 0, 0, 0.3) url(<%= asset_path "globe.png" %>) 50% 50% no-repeat; height:400px; width:100%;
+  a {padding:0;}
+}
 
 .hfeed {
   .hentry {position:relative;

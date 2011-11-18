@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 	#
 	# note: for efficiency, make sure your ActiveRecord query for the entries
 	# uses `:include => :keywords`
-	def monthly_keyword_activity(keyword_ids)
+	def monthly_keyword_activity keyword_ids
 		longest_streak = 0
 
 		keyword_options = { :order => "name ASC", :include => :entries }
