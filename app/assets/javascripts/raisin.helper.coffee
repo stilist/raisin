@@ -9,11 +9,12 @@ namespace = (target, name, block) ->
 namespace "Raisin.helper", (exports, top) ->
 	$ = jQuery
 
-	pretty_keyword = (keyword) ->
+	exports.pretty_keyword = (keyword) ->
 		keyword.name.replace /[a-z]+:/, "" #.humanize
 
-	sanitized_keyword = (keyword) ->
+	exports.sanitized_keyword = (keyword) ->
 		keyword.name.replace /[^a-zA-Z0-9]/, "_"
 
-	keywords_as_classes = (keywords) ->
-		(keywords.sort.map (keyword) -> sanitized_keyword keyword).join " "
+	exports.keywords_as_classes = (keywords) ->
+		(keywords.sort().map (keyword) ->
+			Raisin.helper.sanitized_keyword keyword).join " "

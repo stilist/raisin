@@ -1,38 +1,37 @@
 $ = jQuery
 
-Handlebars?.register_helper "entry_classes", (items, fn) ->
+Handlebars?.registerHelper "entry_classes", (items, fn) ->
 	["hentry", Raisin.helper.keywords_as_classes(items)].join " "
 
-Handlebars?.register_helper "formatted_title", (item, fn) ->
-	# Run through `keywords` until finding one that starts with `"kind:"`.
+Handlebars?.registerHelper "formatted_title", (item, fn) ->
+	# Run through `keywords` until one starts with `"kind:"`.
 	for keyword in item.keywords
-		if keyword.match /kind:/
-			title = switch keyword.replace /kind:/, ""
+		if keyword.name.match /kind:/
+			switch keyword.name.replace /kind:/, ""
 				# TODO I18n
 				when "checkin"
-					"<span class='verb' title='checkin'>checked in at</span>
-						<a href='#{entry.bookmark_url}' class='bookmark'>#{entry.title}</a>
-					 with #{Raisin.helper.pretty_keyword source}#{":" if entry.body.length > 0 }"
+					title = "<span class='verb' title='checkin'>checked in at</span>
+						<a href='#{item.bookmark_url}' class='bookmark'>#{item.title}</a>"
 				when "favorite"
-					"<span class='verb' title='favorite'>Added
-						<q><a href='#{entry.bookmark_url}' class='bookmark'>#{entry.title}</a></q>
+					title = "<span class='verb' title='favorite'>Added
+						<q><a href='#{item.bookmark_url}' class='bookmark'>#{item.title}</a></q>
 						to favorites</span>
-						on #{Raisin.helper.pretty_keyword source}#{":" if entry.body.length > 0}"
+						on #{Raisin.helper.pretty_keyword source}"
 				when "status"
-					"<span class='verb' title='post'>posted</span>
-						<q>#{entry.title}</q>
-						to #{Raisin.helper.pretty_keyword source}#{":" if entry.body.length > 0}"
-				else item.title
+					title = "<span class='verb' title='post'>posted</span>
+						<q>#{item.title}</q>
+						to #{Raisin.helper.pretty_keyword source}"
+				else title = item.title
+
 		break if title
-	title or item.title
 
-Handlebars?.register_helper "iso8601", (item, fn) ->
-	item.toISOString()
+	title or= item.title
 
-Handlebars?.register_helper "human_date", (item, fn) ->
-	#TODO I18n
-	item
+	new Handlebars.SafeString title
 
-Handlebars?.register_helper "entry_link", (item, fn) ->
+Handlebars?.registerHelper "human_date", (item, fn) ->
+	new Date(item).toLocaleDateString()
+
+Handlebars?.registerHelper "entry_link", (item, fn) ->
 	# TODO Hack.
 	"/entries/#{item.id}"

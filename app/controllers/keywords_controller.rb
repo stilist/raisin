@@ -9,7 +9,6 @@ class KeywordsController < ApplicationController
 				{ :keyword => @keyword.name })
 			@entries = @keyword.entries.all({ :order => "created_at DESC",
 					:limit => 50, :include => [:keywords, :locations] })
-#			@activity = monthly_keyword_activity(@entries)
 
 			respond_to do |format|
 				format.html

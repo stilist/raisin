@@ -1,33 +1,15 @@
 #= require jquery
 #= require jquery_ujs
-#= require handlebars.1.0.0.beta.3
+# vendor
 #= require jquery.offline
-#= require jquery.sparkline.min
 #= require es5-shim.min
+#= require handlebars.1.0.0.beta.3
+# Raisin
+#= require raisin.helper
+#= require entry_helper
+#= require keyword_helper
 
 $ = jQuery
-
-window.generate_sparklines = (activities) ->
-	$activity_types = $("#activity_types")
-
-	for activity in activities
-		counts = activity.counts
-		pretty_name = activity.name.split(":")[1]
-
-		$activity = $("<li class='#{pretty_name}'>" +
-			"  <a href='/keywords/#{activity.id}'>#{activity.name}</a>" +
-			"  <span class='sparkline'></span>" +
-			"</li>")
-		$activity_types.append $activity
-
-		options =
-			fillColor: false
-			lineColor: activity.color
-			minSpotColor: false
-			maxSpotColor: false
-			spotColor: "#fff"
-
-		$activity.children(".sparkline").sparkline counts, options
 
 window.generate_map = (options) ->
 	settings = jQuery.extend
@@ -35,9 +17,9 @@ window.generate_map = (options) ->
 		map_id: ""
 	, options
 
-	$map = $("#map")
+	$map = $("##{settings.map_id}").empty()
 
-	if google?
+	if google? and false
 		myOptions =
 			disableDefaultUI: true
 			center: new google.maps.LatLng 0, 0

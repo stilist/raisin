@@ -1,7 +1,7 @@
 %script#entry_template{:type => "text/x-handlebars-template"}
   %article{:class => "{{entry_classes keywords}}", :id => "entry_{{id}}"}
     %header
-      %h1.entry-title {{formatted_title entry}}
+      %h1.entry-title {{formatted_title this}}
     %section{:class => "entry-content {{#unless body}}empty{{/unless}}"}
       {{body}}
     %section.meta
@@ -9,21 +9,22 @@
       %ul.keywords
         {{#each keywords}}
         %li
-          %a{:href => "{{keyword_link this}}",
-              :class => "tag {{sanitized_keyword this}}", :rel => "tag"}
+          %a{:href => "{{keyword_link this}}", :rel => "tag",
+              :class => "tag {{sanitized_keyword this}}"}
             {{this.name}}
+        {{/each}}
         .clear
+      {{/if}}
       %p.signoff
         %a
-          %time.updated{:datetime => "{{iso8601 created_at}}",
-              :pubdate => "pubdate"}
-            {{human_date created_at}}
+          %time.updated{:datetime => "{{updated_at}}", :pubdate => "pubdate"}
+            {{human_date updated_at}}
         •
         {{#if bookmark_url}}
         %a{:href => "{{bookmark_url}}", :rel => "external"}
           = t("entries.bookmark_url")
         •
         {{/if}}
-        %a.pilcrow{:href => "{{entry_link entry}}", :rel => "bookmark",
+        %a.pilcrow{:href => "{{entry_link this}}", :rel => "bookmark",
             :title => "Permanent link for this entry"}
           ⁋
