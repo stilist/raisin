@@ -19,7 +19,7 @@ window.generate_map = (options) ->
 
 	$map = $("##{settings.map_id}").empty()
 
-	if google? and false
+	if google?
 		myOptions =
 			disableDefaultUI: true
 			center: new google.maps.LatLng 0, 0

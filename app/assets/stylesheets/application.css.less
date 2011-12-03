@@ -1,0 +1,36 @@
+//= require "style"
+
+body {background-image:none; padding-top:0;}
+
+#participants {background-color:#aa5a32; left:0; position:fixed; right:0; top:0;}
+// Globe image is CC:BY; http://thenounproject.com/noun/globe/#icon-No711
+#map {background:rgba(0, 0, 0, 0.3) asset-url("globe.png") 50% 50% no-repeat; height:400px; width:100%;
+  a {padding:0;}
+}
+
+.hfeed {
+  .hentry {position:relative;
+    & + .hentry.kind_text .entry-title {font-size:18pt; margin:70px 0 11px 0;}
+
+    .entry-title {font-size:0.9em;}
+
+    &.kind_text .entry-content {font-size:1.1em; margin:2.55em 0 1px 0;}
+
+    .keywords .tag {background-position:0% 50%; background-repeat:no-repeat; padding-left:18px;
+        // famfamfam icons are CC:BY; http://www.famfamfam.com/lab/icons/silk/
+        &.kind_bookmark {background-image:asset-url("famfamfam_silk/link.png");}
+        &.kind_checkin {background-image:asset-url("famfamfam_silk/map.png");}
+        &.kind_favorite {background-image:asset-url("famfamfam_silk/star.png");}
+        &.kind_image {background-image:asset-url("famfamfam_silk/image.png");}
+        &.kind_like {background-image:asset-url("famfamfam_silk/like.png");}
+        &.kind_listen {background-image:asset-url("famfamfam_silk/music.png");}
+        &.kind_status {background-image:asset-url("famfamfam_silk/pencil.png");}
+        &.kind_text {background-image:asset-url("famfamfam_silk/page_white_text.png");}
+        &.src_flickr {background-image:asset-url("external_services/flickr.png");}
+        &.src_gowalla {background-image:asset-url("external_services/gowalla.png");}
+        &.src_twitter {background-image:asset-url("external_services/twitter.png");}
+        &.src_youtube {background-image:asset-url("external_services/youtube.png");}
+      }
+    }
+  }
+}
