@@ -3,13 +3,11 @@
     = render :partial => "entries/entry", :collection => @entries
     = paginate @entries
 
-    :javascript
-      jQuery(document).ready(function () {
-        generate_map({
+    :coffeescript
+      jQuery(document).ready ->
+        generate_map
           markers: #{raw generate_markers(@entries).to_json},
           map_id: "map"
-        });
-      });
 
   - else
     / TODO I18n
