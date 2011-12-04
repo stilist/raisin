@@ -1,3 +1,5 @@
 class LastImport < ActiveRecord::Base
-	validates_presence_of :service_name
+	belongs_to :entry_source
+
+	validates :entry_source_id, :numericality => true
 end
