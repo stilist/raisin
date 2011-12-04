@@ -50,4 +50,6 @@ Raisin3::Application.configure do
 	config.assets.compress = true
 	config.assets.compile = false
 	config.assets.digest = true
+
+	config.assets.precompile += %w(desktop.js desktop.css)
 end
