@@ -1,18 +1,17 @@
-//= require "style"
+//= require style
+//= depend_on _assets
 
-/* Images from The Noun Project are either Creative Commons or public domain.
-Noun names are retained, so for a file named `dog`, go to
-`http://thenounproject.com/noun/dog`. */
+@import "_assets";
 
 body {background-image:none; padding-top:0;}
 
 #participants {background-color:#aa5a32; left:0; position:fixed; right:0; top:0;}
-#map {background:rgba(0, 0, 0, 0.3) asset-url("thenounproject/globe.png") 50% 50% no-repeat; height:400px; width:100%;
+#map {background:rgba(0, 0, 0, 0.3) @np_globe 50% 50% no-repeat; height:400px; width:100%;
   a {padding:0;}
 }
 
 .hfeed {
-  .empty {margin-bottom:50px; margin-top:150px; opacity:0.7; text-align:center;}
+  .empty {margin-bottom:100px; margin-top:150px; opacity:0.7; text-align:center;}
 
   .hentry {position:relative;
     & + .hentry.kind_text .entry-title {font-size:18pt; margin:70px 0 11px 0;}
@@ -22,19 +21,18 @@ body {background-image:none; padding-top:0;}
     &.kind_text .entry-content {font-size:1.1em; margin:2.55em 0 1px 0;}
 
     .keywords .tag {background-position:0% 50%; background-repeat:no-repeat; padding-left:18px;
-        /* famfamfam icons are CC:BY; http://www.famfamfam.com/lab/icons/silk/ */
-        &.kind_bookmark {background-image:asset-url("famfamfam_silk/link.png");}
-        &.kind_checkin {background-image:asset-url("famfamfam_silk/map.png");}
-        &.kind_favorite {background-image:asset-url("famfamfam_silk/star.png");}
-        &.kind_image {background-image:asset-url("famfamfam_silk/image.png");}
-        &.kind_like {background-image:asset-url("famfamfam_silk/like.png");}
-        &.kind_listen {background-image:asset-url("famfamfam_silk/music.png");}
-        &.kind_status {background-image:asset-url("famfamfam_silk/pencil.png");}
-        &.kind_text {background-image:asset-url("famfamfam_silk/page_white_text.png");}
-        &.src_flickr {background-image:asset-url("external_services/flickr.png");}
-        &.src_gowalla {background-image:asset-url("external_services/gowalla.png");}
-        &.src_twitter {background-image:asset-url("external_services/twitter.png");}
-        &.src_youtube {background-image:asset-url("external_services/youtube.png");}
+        &.kind_bookmark {background-image:@fam_link;}
+        &.kind_checkin {background-image:@fam_map;}
+        &.kind_favorite {background-image:@fam_star;}
+        &.kind_image {background-image:@fam_image;}
+        &.kind_like {background-image:@fam_like;}
+        &.kind_listen {background-image:@fam_music;}
+        &.kind_status {background-image:@fam_pencil;}
+        &.kind_text {background-image:@fam_text;}
+        &.src_flickr {background-image:@fav_flickr;}
+        &.src_gowalla {background-image:@fav_gowalla;}
+        &.src_twitter {background-image:@fav_twitter;}
+        &.src_youtube {background-image:@fav_youtube;}
       }
     }
   }
