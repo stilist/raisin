@@ -2,7 +2,6 @@ class EntriesController < ApplicationController
 	layout "default"
 
 	def index
-		@page_title = t("entries.newest")
 		@entries = Entry.page params[:page]
 
 		respond_to do |format|
@@ -18,7 +17,7 @@ class EntriesController < ApplicationController
 		if @entry
 			@page_title = @entry.title
 		else
-			# 404
+			redirect_to root_url
 		end
 	end
 

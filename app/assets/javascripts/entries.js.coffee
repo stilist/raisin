@@ -23,8 +23,9 @@ $(document).ready ->
 				# 	markers: $.unique locations
 				# 	map_id: "map"
 
-		$("a").bind "click.entries", (e) ->
-			if $(this).prop("rel") in ["next", "prev"]
-				e.preventDefault()
+		# TODO Disabled because it's not fully functional yet.
+		# $("a").bind "click.entries", (e) ->
+		# 	if $(this).prop("rel") in ["next", "prev"]
+		# 		e.preventDefault()
 
-				render_entries $(this).prop "href"
+		# 		render_entries $(this).prop "href"
