@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.1'
 
-gem 'sqlite3'
 
 gem "crack"
 
@@ -34,6 +33,7 @@ gem 'haml'
 # group :development, :test do
 #   gem 'webrat'
 # end
+gem 'pg'
 
 gem "jquery-rails"
 
