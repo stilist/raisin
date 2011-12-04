@@ -6,8 +6,8 @@ class Location < ActiveRecord::Base
 	serialize :geoloc
 	before_validation :geocode_address
 
-	validates_numericality_of :lat, { :allow_nil => true }
-	validates_numericality_of :lng, { :allow_nil => true }
+	validates :lat, :allow_nil => true, :numericality => true
+	validates :lng, :allow_nil => true, :numericality => true
 
 	private
 	def geocode_address

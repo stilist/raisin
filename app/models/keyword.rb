@@ -4,7 +4,7 @@ class Keyword < ActiveRecord::Base
 	has_and_belongs_to_many :entries
 	has_one :entry_source
 
-	validates_presence_of :name
+	validates :name, :presence => true
 
 	def color
 		"#" << Digest::MD5.hexdigest(self.name)[0..5]
