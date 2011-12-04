@@ -1,14 +1,19 @@
 //= require "style"
 
+/* Images from The Noun Project are either Creative Commons or public domain.
+Noun names are retained, so for a file named `dog`, go to
+`http://thenounproject.com/noun/dog`. */
+
 body {background-image:none; padding-top:0;}
 
 #participants {background-color:#aa5a32; left:0; position:fixed; right:0; top:0;}
-// Globe image is CC:BY; http://thenounproject.com/noun/globe/#icon-No711
-#map {background:rgba(0, 0, 0, 0.3) asset-url("globe.png") 50% 50% no-repeat; height:400px; width:100%;
+#map {background:rgba(0, 0, 0, 0.3) asset-url("thenounproject/globe.png") 50% 50% no-repeat; height:400px; width:100%;
   a {padding:0;}
 }
 
 .hfeed {
+  .empty {margin-bottom:50px; margin-top:150px; opacity:0.7; text-align:center;}
+
   .hentry {position:relative;
     & + .hentry.kind_text .entry-title {font-size:18pt; margin:70px 0 11px 0;}
 
@@ -17,7 +22,7 @@ body {background-image:none; padding-top:0;}
     &.kind_text .entry-content {font-size:1.1em; margin:2.55em 0 1px 0;}
 
     .keywords .tag {background-position:0% 50%; background-repeat:no-repeat; padding-left:18px;
-        // famfamfam icons are CC:BY; http://www.famfamfam.com/lab/icons/silk/
+        /* famfamfam icons are CC:BY; http://www.famfamfam.com/lab/icons/silk/ */
         &.kind_bookmark {background-image:asset-url("famfamfam_silk/link.png");}
         &.kind_checkin {background-image:asset-url("famfamfam_silk/map.png");}
         &.kind_favorite {background-image:asset-url("famfamfam_silk/star.png");}
