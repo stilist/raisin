@@ -1,6 +1,7 @@
 en:
   entries:
     bookmark_url: "Source"
+    empty: "No entries yet."
     newest: "Newest entries"
 
   keywords:

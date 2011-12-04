@@ -2,13 +2,12 @@
   - unless @entries.empty?
     = render :partial => "entries/entry", :collection => @entries
     = paginate @entries
-
-    :coffeescript
-      jQuery(document).ready ->
-        generate_map
-          markers: #{raw generate_markers(@entries).to_json},
-          map_id: "map"
-
   - else
-    / TODO I18n
-    p.empty No entries yet.
+    %p.empty
+      = t "entries.empty"
+
+:coffeescript
+  jQuery(document).ready ->
+    generate_map
+      markers: #{raw generate_markers(@entries).to_json},
+      map_id: "map"
