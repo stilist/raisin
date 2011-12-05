@@ -1,0 +1,1 @@
+((function(){var a;a=jQuery,a(document).ready(function(){var b,c,d,e,f;b=a("#entry_template"),c=a(".hfeed");if(b.length!==0)return d=b.html(),e=Handlebars.compile(d),f=function(b){return a.retrieveJSON(b,function(b,d,f){var g,h,i,j,k;h=[],a(".hentry").remove(),k=[];for(i=0,j=b.length;i<j;i++)g=b[i],c.prepend(a(e(g))),k.push(h.push(g.locations));return k})}})})).call(this)

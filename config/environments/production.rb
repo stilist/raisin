@@ -51,5 +51,5 @@ Raisin3::Application.configure do
 	config.assets.compile = false
 	config.assets.digest = true
 
-	config.assets.precompile += %w(desktop.js desktop.css)
+	config.assets.precompile += %w(desktop.js desktop.css entries.js)
 end
