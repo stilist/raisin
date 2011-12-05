@@ -51,5 +51,5 @@ Raisin3::Application.configure do
 	config.assets.compile = false
 	config.assets.digest = true
 
-	config.assets.precompile += %w(*.js.coffee *.css.less)
+	config.assets.precompile += %w(*.js *.css)
 end

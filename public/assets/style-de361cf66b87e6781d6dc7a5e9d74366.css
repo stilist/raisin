@@ -56,27 +56,3 @@ strong{font-weight:normal;}
 #disqus_thread #dsq-add-new-comment{font-size:1.1em;line-height:1.6em;margin:3em 0 1em 0;}
 #disqus_thread .dsq-by a{background:transparent;border:none;}
 #disqus_thread #dsq-content{font-size:inherit !important;}
-.svg_bg{background-size:contain;}
-body{background-image:none;padding-top:0;}
-#participants{background-color:#aa5a32;left:0;position:fixed;right:0;top:0;}
-#map{background:rgba(0, 0, 0, 0.3) url(/assets/thenounproject/globe.png) 50% 50% no-repeat;height:400px;width:100%;}
-#map a{padding:0;}
-.hfeed .empty{margin-bottom:100px;margin-top:150px;opacity:0.7;text-align:center;}
-.hfeed .hentry{position:relative;}
-.hfeed .hentry+.hentry.kind_text .entry-title{font-size:18pt;margin:70px 0 11px 0;}
-.hfeed .hentry .empty{display:none;}
-.hfeed .hentry .entry-title{font-size:0.9em;}
-.hfeed .hentry.kind_text .entry-content{font-size:1.1em;margin:2.55em 0 1px 0;}
-.hfeed .hentry .keywords .tag{background-position:0% 50%;background-repeat:no-repeat;padding-left:18px;}
-.hfeed .hentry .keywords .tag.kind_bookmark{background-image:url(/assets/famfamfam_silk/link.png);}
-.hfeed .hentry .keywords .tag.kind_checkin{background-image:url(/assets/famfamfam_silk/map.png);}
-.hfeed .hentry .keywords .tag.kind_favorite{background-image:url(/assets/famfamfam_silk/star.png);}
-.hfeed .hentry .keywords .tag.kind_image{background-image:url(/assets/famfamfam_silk/image.png);}
-.hfeed .hentry .keywords .tag.kind_like{background-image:url(/assets/famfamfam_silk/like.png);}
-.hfeed .hentry .keywords .tag.kind_listen{background-image:url(/assets/famfamfam_silk/music.png);}
-.hfeed .hentry .keywords .tag.kind_status{background-image:url(/assets/famfamfam_silk/pencil.png);}
-.hfeed .hentry .keywords .tag.kind_text{background-image:url(/assets/famfamfam_silk/page_white_text.png);}
-.hfeed .hentry .keywords .tag.src_flickr{background-image:url(/assets/external_services/flickr.png);}
-.hfeed .hentry .keywords .tag.src_gowalla{background-image:url(/assets/external_services/gowalla.png);}
-.hfeed .hentry .keywords .tag.src_twitter{background-image:url(/assets/external_services/twitter.png);}
-.hfeed .hentry .keywords .tag.src_youtube{background-image:url(/assets/external_services/youtube.png);}

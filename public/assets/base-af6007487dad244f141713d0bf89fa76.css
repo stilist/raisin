@@ -59,7 +59,7 @@ strong{font-weight:normal;}
 .svg_bg{background-size:contain;}
 body{background-image:none;padding-top:0;}
 #participants{background-color:#aa5a32;left:0;position:fixed;right:0;top:0;}
-#map{background:rgba(0, 0, 0, 0.3) url(/assets/thenounproject/globe.png) 50% 50% no-repeat;height:400px;width:100%;}
+#map{background:rgba(0, 0, 0, 0.3) url(/assets/thenounproject/globe-f6c7965246b4933db0fc2cb952f05b06.png) 50% 50% no-repeat;height:400px;width:100%;}
 #map a{padding:0;}
 .hfeed .empty{margin-bottom:100px;margin-top:150px;opacity:0.7;text-align:center;}
 .hfeed .hentry{position:relative;}
@@ -68,15 +68,15 @@ body{background-image:none;padding-top:0;}
 .hfeed .hentry .entry-title{font-size:0.9em;}
 .hfeed .hentry.kind_text .entry-content{font-size:1.1em;margin:2.55em 0 1px 0;}
 .hfeed .hentry .keywords .tag{background-position:0% 50%;background-repeat:no-repeat;padding-left:18px;}
-.hfeed .hentry .keywords .tag.kind_bookmark{background-image:url(/assets/famfamfam_silk/link.png);}
-.hfeed .hentry .keywords .tag.kind_checkin{background-image:url(/assets/famfamfam_silk/map.png);}
-.hfeed .hentry .keywords .tag.kind_favorite{background-image:url(/assets/famfamfam_silk/star.png);}
-.hfeed .hentry .keywords .tag.kind_image{background-image:url(/assets/famfamfam_silk/image.png);}
+.hfeed .hentry .keywords .tag.kind_bookmark{background-image:url(/assets/famfamfam_silk/link-abfb1774055aa0c5210ae008c0ddb0cd.png);}
+.hfeed .hentry .keywords .tag.kind_checkin{background-image:url(/assets/famfamfam_silk/map-96fe3bb7f31bf311eb1636f83695959d.png);}
+.hfeed .hentry .keywords .tag.kind_favorite{background-image:url(/assets/famfamfam_silk/star-bf548f82e338c3dde8ff1824e9ff5e5f.png);}
+.hfeed .hentry .keywords .tag.kind_image{background-image:url(/assets/famfamfam_silk/image-2b0068bcd3e2c195370cc2b908dfc6f9.png);}
 .hfeed .hentry .keywords .tag.kind_like{background-image:url(/assets/famfamfam_silk/like.png);}
-.hfeed .hentry .keywords .tag.kind_listen{background-image:url(/assets/famfamfam_silk/music.png);}
-.hfeed .hentry .keywords .tag.kind_status{background-image:url(/assets/famfamfam_silk/pencil.png);}
-.hfeed .hentry .keywords .tag.kind_text{background-image:url(/assets/famfamfam_silk/page_white_text.png);}
-.hfeed .hentry .keywords .tag.src_flickr{background-image:url(/assets/external_services/flickr.png);}
-.hfeed .hentry .keywords .tag.src_gowalla{background-image:url(/assets/external_services/gowalla.png);}
-.hfeed .hentry .keywords .tag.src_twitter{background-image:url(/assets/external_services/twitter.png);}
-.hfeed .hentry .keywords .tag.src_youtube{background-image:url(/assets/external_services/youtube.png);}
+.hfeed .hentry .keywords .tag.kind_listen{background-image:url(/assets/famfamfam_silk/music-2681867b8f72774acb1331979045d993.png);}
+.hfeed .hentry .keywords .tag.kind_status{background-image:url(/assets/famfamfam_silk/pencil-ef29c01716f6ac9f97862483a4b96d0f.png);}
+.hfeed .hentry .keywords .tag.kind_text{background-image:url(/assets/famfamfam_silk/page_white_text-e3a393efddc5186ffa60f55afb4c06e9.png);}
+.hfeed .hentry .keywords .tag.src_flickr{background-image:url(/assets/external_services/flickr-a33566689c89e3caa7ceb3b193f70146.png);}
+.hfeed .hentry .keywords .tag.src_gowalla{background-image:url(/assets/external_services/gowalla-f46e9e79ba767327c874536d42347f6b.png);}
+.hfeed .hentry .keywords .tag.src_twitter{background-image:url(/assets/external_services/twitter-7ebd234673074588318b08940f3eb919.png);}
+.hfeed .hentry .keywords .tag.src_youtube{background-image:url(/assets/external_services/youtube-d4494ecdacc6d2c1719e13746691995b.png);}
