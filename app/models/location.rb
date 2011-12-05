@@ -4,22 +4,7 @@ class Location < ActiveRecord::Base
 	# GeoKit
 	acts_as_mappable
 	serialize :geoloc
-	before_validation :geocode_address
 
 	validates :lat, :allow_nil => true, :numericality => true
 	validates :lng, :allow_nil => true, :numericality => true
-
-	private
-	def geocode_address
-		if !self.address.blank? && self.lat.nil? && self.lng.nil?
-			geo = Geokit::Geocoders::MultiGeocoder.geocode(address)
-			if geo.success
-				self.lat, self.lng, self.geoloc = geo.lat, geo.lng, geo
-			else
-				errors.add(:address, "Could not find address")
-			end
-		else
-			errors.add(:address, "Unusable location (no address or coordinates)")
-		end
-	end
 end
