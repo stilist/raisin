@@ -111,6 +111,7 @@ module Raisin
 				location = Location.find_or_initialize_by_gowalla_id({
 					:lat => data["lat"],
 					:lng => data["lng"],
+					:name => data["name"],
 					:foursquare_id => data["foursquare_id"],
 					:gowalla_id => data["id"].to_s,
 					:yelp_id => data["yelp_url"]
