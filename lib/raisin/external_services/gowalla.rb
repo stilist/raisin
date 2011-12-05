@@ -4,12 +4,20 @@ module Raisin
 			def initialize
 				@@utilities = Raisin::ExternalServices::Utilities.new
 
-				begin
-					config_path = File.join Rails.root, "config", "external_services.yml"
-					config = YAML.load_file config_path
-					@@config = SERVICES_CONFIG["gowalla"]
-				rescue Exception => e
-					abort "\n\nERROR: #{e}\n\n"
+				# TODO Remove fallbacks.
+				@@config = {
+					:username => ENV["GOWALLA_USERNAME"],
+					:password => ENV["GOWALLA_PASSWORD"],
+					:api_key => ENV["GOWALLA_API_KEY"]
+				}
+
+				if @@config[:username] && @@config[:password] && @@config[:api_key]
+					@@entry_source = EntrySource.where(:system_name => "gowalla").first
+
+					@@keywords = [@@entry_source.keyword]
+					@@keywords << Keyword.find_by_name("kind:checkin")
+				else
+					puts "Please set the appropriate Gowalla environmental variables."
 				end
 			end
 
@@ -17,24 +25,17 @@ module Raisin
 			def import
 				puts "  * getting user info"
 
-				user_info = api_call :method => "users/#{@@config["username"]}"
+				user_info = api_call :method => "users/#{@@config[:username]}"
 
-				keywords = %w(kind:checkin src:gowalla).map do |keyword|
-					Keyword.find_or_create_by_name keyword
-				end
+				last_import = @@entry_source.last_import
 
-				last_import = LastImport.where(:service_name => "Gowalla").first
-				last_updated = last_import ? last_import.timestamp : nil
-
-				entries = []
 				current_page = 1
 				get_next_page = true
-				import_error = false
 
 				puts "  * getting checkins"
-				# xxx need to handle error situations -- HTTP errors, empty responses,
-				# authentication failure, etc.
-				until !get_next_page
+				while get_next_page
+					entries = []
+
 					# Gowalla API has a hard limit of 25 items per page
 					data = api_call :method => user_info["activity_url"],
 							:params => { :per_page => 25, :page => current_page }
@@ -43,53 +44,40 @@ module Raisin
 						items = data["activity"]
 
 						items.each do |item|
-							entry = Entry.
-									where(:bookmark_url => "http://gowalla.com#{item["url"]}").
-									first
+							entry = Entry.where(:bookmark_url => "http://gowalla.com#{item["url"]}").first
 
-							# Only process/log previously-unseen itemss
+							# Only save previously-unseen items.
 							unless entry
 								print "."
 								entry = generate_entry item
-								entry.keywords = keywords
-								entries << entry
-							end
+								entry.keywords = @@keywords
 
-							# Stop pulling items when we hit an entry that's before our
-							# most recent import.
-							#
-							# xxx possible problem if there's a item while the import is
-							# running (/jordan)
-							if last_updated && entry.created_at < last_updated
-								get_next_page = false
-								break
+								# Stop pulling items when if the entry's timestamp is before
+								# `last_import`.
+								if false #last_import.timestamp && entry.created_at < last_import.timestamp
+									get_next_page = false
+									break
+								else
+									entries << entry
+								end
 							end
 						end
+
+						entries.each { |entry| entry.save }
+						puts "  * #{entries.length} new entries"
+
+						last_import.update_attributes :timestamp => Time.now
+
 						current_page += 1
 
 						# Limited to 5 requests/second with API key or 1/second without.
-						# Automatically limit ourselves to 1/second.
+						# Enforce maximum of 1/second.
 						sleep 1
 					else
-						import_error = true
 						get_next_page = false
 					end
 				end
 				puts
-
-				puts "  * found #{entries.length} new checkins"
-				# We call the API newest-to-oldest, but it makes more sense for us to
-				# write to the database oldest-to-newest.
-				entries.reverse_each { |entry| entry.save }
-
-				unless import_error
-					if last_import
-						last_import.update_attributes :timestamp => Time.now
-					else
-						LastImport.create :service_name => "Gowalla",
-								:timestamp => Time.now
-					end
-				end
 			end
 
 			private
@@ -103,11 +91,11 @@ module Raisin
 			#         (e.g. `{ "max-results" => 25 }`)
 			def api_call options = {}
 				headers = {
-					"X-Gowalla-API-Key" => @@config["api_key"],
+					"X-Gowalla-API-Key" => @@config[:api_key],
 					"Accept" => "application/json",
 					"Content-Type" => "application/json",
-					:http_basic_authentication => [@@config["username"],
-							@@config["password"]]
+					:http_basic_authentication => [@@config[:username],
+							@@config[:password]]
 				}
 
 				@@utilities.api_call({
@@ -117,29 +105,37 @@ module Raisin
 				})
 			end
 
+			def generate_location url
+				data = api_call :method => url
+
+				location = Location.find_or_initialize_by_gowalla_id({
+					:lat => data["lat"],
+					:lng => data["lng"],
+					:foursquare_id => data["foursquare_id"],
+					:gowalla_id => data["id"].to_s,
+					:yelp_id => data["yelp_url"]
+				})
+
+				if location.new_record?
+					if data["street_address"]
+						location.update_attributes :address => "#{data["street_address"]}, #{data["locality"]}, #{data["region"]}"
+					end
+				end
+
+				location
+			end
+
 			def generate_entry item
 				entry = @@utilities.generate_entry({
 					:title => item["spot"]["name"],
 					:body => item["message"],
 					:created_at => item["created_at"],
 					:updated_at => item["created_at"],
-					:bookmark_url => "http://gowalla.com#{item["url"]}"
+					:bookmark_url => "http://gowalla.com#{item["url"]}",
+					:entry_source_id => @@entry_source.id
 				})
 
-				location = Location.find_or_initialize_by_lat_and_lng({
-					:lat => item["spot"]["lat"],
-					:lng => item["spot"]["lng"],
-					:name => item["spot"]["name"]
-				})
-
-				if location.new_record?
-					location_data = api_call :method => item["spot"]["url"]
-
-					if location_data["street_address"]
-						location.address = "#{location_data["street_address"]}, #{location_data["locality"]}, #{location_data["region"]}"
-					end
-				end
-
+				location = generate_location item["spot"]["url"]
 				entry.locations = [location].flatten
 
 				entry
